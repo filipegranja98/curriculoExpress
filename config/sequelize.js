@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Conectar ao banco de dados
-const sequelize = new Sequelize('postgres://pednlmtr:WdcDS1Q1PQ8-eDRUJd6IlP8Lw01zdgM5@isabelle.db.elephantsql.com/pednlmtr');
+const sequelize = new Sequelize(process.env.POSTEGRES_URL);
 
 sequelize.authenticate()
   .then(() => {
