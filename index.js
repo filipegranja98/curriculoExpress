@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const Curriculo = require('./config/sequelize'); // Importar o modelo de currículo
 
 const app = express();
-const port = 3000;
+const port = 5432;
 
 app.use(bodyParser.json());
 
@@ -41,7 +41,7 @@ app.get('/curriculos', async (req, res) => {
     try {
       const { nome } = req.params;
       // Consultar currículos no banco de dados com base no nome
-      const curriculos = await Curriculo.findOne({
+      const curriculos = await Curriculo.findAll({
         where: {
           nome: nome
         }
@@ -57,7 +57,7 @@ app.get('/curriculos', async (req, res) => {
   app.get('/curriculos/:id',async(req,res)=>{
     try{
       const {id} = req.params;
-      const curriculos = await Curriculo.findOne({
+      const curriculos = await Curriculo.findAll({
         where:{
           id : id
         }
