@@ -57,7 +57,7 @@ app.get('/curriculos', async (req, res) => {
   app.get('/curriculos/:id',async(req,res)=>{
     try{
       const {id} = req.params;
-      const curriculos = await Curriculo.findAll({
+      const curriculos = await Curriculo.findOne({
         where:{
           id : id
         }
