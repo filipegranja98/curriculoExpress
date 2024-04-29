@@ -8,7 +8,7 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-// Rota para criar um novo currículo
+// Rota para criar um novo currículo!
 app.post('/curriculos', async (req, res) => {
   try {
     const { nome, email,telefone ,endereco ,experiencia ,formacao } = req.body;
