@@ -1,7 +1,8 @@
+require('dotenv').config(); 
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Conectar ao banco de dados
-const sequelize = new Sequelize(process.env.POSTEGRES_URL);
+const sequelize = new Sequelize(process.env.POSTGRES_URL);
 
 sequelize.authenticate()
   .then(() => {
@@ -19,7 +20,8 @@ const Curriculo = sequelize.define('Curriculos', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true,
   },
   telefone:{
     type: DataTypes.STRING,

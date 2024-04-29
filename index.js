@@ -1,10 +1,10 @@
 // index.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const Curriculo = require('./config/sequelize'); // Importar o modelo de currículo
+const Curriculo = require('./sequelize'); // Importar o modelo de currículo
 
 const app = express();
-const port = 5432;
+const port = 3000;
 
 app.use(bodyParser.json());
 
@@ -43,8 +43,9 @@ app.get('/curriculos', async (req, res) => {
       // Consultar currículos no banco de dados com base no nome
       const curriculos = await Curriculo.findAll({
         where: {
-          nome: nome
-        }
+          nome: nome,
+        },
+        attributes: ['nome', 'email', 'telefone', 'endereco','experiencia','formacao'],
         
       });
       res.json(curriculos);
@@ -54,20 +55,49 @@ app.get('/curriculos', async (req, res) => {
     }
   });
   
-  app.get('/curriculos/:id',async(req,res)=>{
-    try{
-      const {id} = req.params;
-      const curriculos = await Curriculo.findAll({
-        where:{
-          id : id
-        }
+
+
+  app.put('/curriculos/:nome', async (req, res) => {
+    try {
+      const { nome } = req.params;
+      const { email, telefone, endereco, experiencia, formacao } = req.body;
+      // Atualizar o currículo no banco de dados
+      const curriculoAtualizado = await Curriculo.update({
+        email: email,
+        telefone:telefone,
+        endereco:endereco,
+        experiencia:experiencia,
+        formacao:formacao
+      }, {
+        where: { nome }
       });
-      res.json(curriculos);
-    }catch(error){
-      console.error('Erro ao buscar currículos por nome:', error);
-      res.status(500).json({ error: 'Erro ao buscar currículos por nome' });
+      res.status(200).json({ message: 'Currículo atualizado com sucesso' });
+    } catch (error) {
+      console.error('Erro ao atualizar currículo:', error);
+      res.status(500).json({ error: 'Erro ao atualizar currículo' });
     }
-  })
+  });
+  
+  // Rota para excluir um currículo existente pelo nome
+  app.delete('/curriculos/:nome', async (req, res) => {
+    try {
+      const { nome } = req.params;
+      // Excluir o currículo do banco de dados
+      await Curriculo.destroy({
+        where: { nome }
+      });
+      res.status(200).json({ message: 'Currículo excluído com sucesso' });
+    } catch (error) {
+      console.error('Erro ao excluir currículo:', error);
+      res.status(500).json({ error: 'Erro ao excluir currículo' });
+    }
+  });
+    
+  
+
+
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
